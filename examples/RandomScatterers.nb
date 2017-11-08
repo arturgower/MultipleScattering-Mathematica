@@ -1,0 +1,288 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     10684,        280]
+NotebookOptionsPosition[     10048,        252]
+NotebookOutlinePosition[     10416,        268]
+CellTagsIndexPosition[     10373,        265]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Multiple scattering from Randomly placed cylinders", "Chapter",
+ CellChangeTimes->{{3.66461395798136*^9, 3.664613981807877*^9}, 
+   3.664628648742505*^9, {3.719152171058159*^9, 3.719152182532029*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Get", "[", 
+   RowBox[{
+    RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+    "\"\<../src/MultipleScattering2D.wl\>\""}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"directory", "=", " ", 
+  RowBox[{"NotebookDirectory", "[", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.664613979628768*^9, 3.664614011149392*^9}, {
+  3.664628667730894*^9, 3.6646286687795963`*^9}, {3.719152147573399*^9, 
+  3.719152165345039*^9}}],
+
+Cell[BoxData["\<\"/home/art/uom/study/Scattering/ScatterCylinder/v3/examples/\
+\"\>"], "Output",
+ CellChangeTimes->{{3.719152160600321*^9, 3.719152165766945*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ StyleBox[
+  RowBox[{
+   RowBox[{"Generate", " ", "randomly", " ", "placed", " ", "cylinders"}], 
+   ";"}], "Subsection"], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"radius", "=", "0.1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"N0", "=", "3"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NParticles", "=", "8"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"width", "=", "3"}], ";", 
+   RowBox[{"height", "=", "3"}], ";"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Xs", " ", "=", 
+    RowBox[{"GenerateParticles", "[", 
+     RowBox[{"NParticles", ",", "radius", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "width"}], "/", "2"}], ",", 
+          RowBox[{"width", "/", "2"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "height"}], "}"}]}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Calculate", " ", "the", " ", "volume", " ", "fraction"}], ",", 
+    " ", "volfrac", ",", " ", 
+    RowBox[{"the", " ", "mean", " ", "distance"}], ",", " ", "exp", ",", " ", 
+    
+    RowBox[{
+    "and", " ", "the", " ", "standard", " ", "deviation", " ", "of", " ", 
+     "the", " ", "mean", " ", "distance"}], ",", " ", "std"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"volfrac", ",", "exp", ",", "std"}], "}"}], "=", 
+   RowBox[{"StatsFromParticles", "[", 
+    RowBox[{"radius", ",", "Xs"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"DrawScatterers", "[", 
+  RowBox[{"Xs", ",", "radius"}], "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.664613979628768*^9, 3.6646140406250772`*^9}, {
+   3.664629203993202*^9, 3.664629204631304*^9}, {3.664629291795732*^9, 
+   3.664629292908368*^9}, {3.6646295656585503`*^9, 3.66462960186559*^9}, {
+   3.664629660155437*^9, 3.6646296632342463`*^9}, {3.6649683828947*^9, 
+   3.664968398739649*^9}, {3.6649684353997307`*^9, 3.664968457977792*^9}, {
+   3.664968488065628*^9, 3.664968497044508*^9}, 3.66496925969514*^9, {
+   3.664969296463984*^9, 3.664969307850336*^9}, {3.664969658063199*^9, 
+   3.664969662911501*^9}, {3.664969854803885*^9, 3.664969861818451*^9}, {
+   3.664970070319316*^9, 3.664970071524781*^9}, {3.664970192516755*^9, 
+   3.664970193566002*^9}, {3.6661022714617558`*^9, 3.666102280410223*^9}, {
+   3.666102360743903*^9, 3.666102377657683*^9}, {3.6661025394188766`*^9, 
+   3.666102539821929*^9}, {3.6661026162668552`*^9, 3.666102651205793*^9}, {
+   3.719152185953974*^9, 3.719152210420425*^9}, {3.719152248212092*^9, 
+   3.7191523028893843`*^9}, {3.7191523479466877`*^9, 3.719152348917988*^9}, {
+   3.719152582941555*^9, 3.719152594431343*^9}, {3.7191528503692837`*^9, 
+   3.719152855231906*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  {GrayLevel[0.5], DiskBox[{0.07737117397723292, 0.18068514681050196`}, 0.1], 
+   DiskBox[{-0.39101849295342905`, 0.36889324833185677`}, 0.1], 
+   DiskBox[{-0.44871768225423114`, 1.415560607154803}, 0.1], 
+   DiskBox[{-0.2729099160558972, 2.8902195650214715`}, 0.1], 
+   DiskBox[{0.3050729128415117, 2.3189630403867305`}, 0.1], 
+   DiskBox[{0.17277715092589396`, 1.5555781765683507`}, 0.1], 
+   DiskBox[{-1.251235021113755, 0.8923048925968686}, 0.1], 
+   DiskBox[{-0.6221835687590609, 2.7072457338490707`}, 0.1]},
+  Axes->True,
+  AxesLabel->{
+    FormBox["\"x\"", TraditionalForm], 
+    FormBox["\"y\"", TraditionalForm]}]], "Output",
+ CellChangeTimes->{
+  3.719152597503784*^9, {3.7191528508982058`*^9, 3.719152855514324*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ StyleBox[
+  RowBox[{
+   RowBox[{
+   "Measure", " ", "the", " ", "multiply", " ", "scattered", " ", "wave", " ",
+     "for", " ", "a", " ", "range", " ", "of", " ", "frequencies", " ", "at", 
+    " ", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}]}], ";"}], 
+  "Subsection"], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Omega]s", " ", "=", " ", 
+    RowBox[{"Range", "[", 
+     RowBox[{"0.2", ",", "1.", ",", "0.2"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"options", "=", 
+    RowBox[{"{", " ", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"\"\<SourceWave\>\"", "\[Rule]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"I", "/", "4"}], " ", 
+          RowBox[{"HankelH1", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{
+             RowBox[{"#2", " ", 
+              RowBox[{"Norm", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "]"}]}], " ", "/.", 
+             RowBox[{"Abs", "->", "Identity"}]}]}], "]"}]}], "&"}], ")"}]}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{
+      "\"\<BoundaryCondition\>\"", "\[Rule]", " ", "\"\<Dirchlett\>\""}]}], 
+     RowBox[{"(*", 
+      RowBox[{
+      "\"\<BoundaryCondition\>\"", "\[Rule]", " ", "\"\<Neumann\>\""}], 
+      "*)"}], "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Position", " ", "of", " ", "the", " ", "scatterers", " ", "and", " ", 
+    RowBox[{"listeners", "/", "recievers"}]}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"listeners", "=", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"0.", ",", "0."}], "}"}], "}"}]}], ";"}], "\[IndentingNewLine]",
+   "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Calcualted", " ", "scatterd", " ", "wave"}], "*)"}], 
+  "         "}], "\[IndentingNewLine]", 
+ RowBox[{" ", 
+  RowBox[{"FrequencyFromScatterers", "[", 
+   RowBox[{
+   "listeners", ",", " ", "Xs", ",", "radius", ",", " ", "N0", ",", 
+    "\[Omega]s"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.664613979628768*^9, 3.6646140406250772`*^9}, {
+   3.664629203993202*^9, 3.664629204631304*^9}, {3.664629291795732*^9, 
+   3.664629292908368*^9}, {3.6646295656585503`*^9, 3.66462960186559*^9}, {
+   3.664629660155437*^9, 3.6646296632342463`*^9}, {3.6649683828947*^9, 
+   3.664968398739649*^9}, {3.6649684353997307`*^9, 3.664968457977792*^9}, {
+   3.664968488065628*^9, 3.664968497044508*^9}, 3.66496925969514*^9, {
+   3.664969296463984*^9, 3.664969307850336*^9}, {3.664969658063199*^9, 
+   3.664969662911501*^9}, {3.664969854803885*^9, 3.664969861818451*^9}, {
+   3.664970070319316*^9, 3.664970071524781*^9}, {3.664970192516755*^9, 
+   3.664970193566002*^9}, {3.6661022714617558`*^9, 3.666102280410223*^9}, {
+   3.666102360743903*^9, 3.666102377657683*^9}, {3.6661025394188766`*^9, 
+   3.666102539821929*^9}, {3.6661026162668552`*^9, 3.666102651205793*^9}, {
+   3.719152185953974*^9, 3.719152210420425*^9}, {3.719152248212092*^9, 
+   3.7191523028893843`*^9}, {3.7191523479466877`*^9, 3.719152391598536*^9}, 
+   3.719152478334487*^9, {3.719152531248273*^9, 3.7191525632739363`*^9}, {
+   3.719152604660782*^9, 3.7191526444582148`*^9}, {3.719152694564183*^9, 
+   3.719152695957303*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"0.2`", ",", 
+      RowBox[{"0.05443145217176981`", "\[VeryThinSpace]", "-", 
+       RowBox[{"0.03786751744114984`", " ", "\[ImaginaryI]"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0.4`", ",", 
+      RowBox[{"0.0645801491210275`", "\[VeryThinSpace]", "-", 
+       RowBox[{"0.060511787454385506`", " ", "\[ImaginaryI]"}]}]}], "}"}], 
+    ",", 
+    RowBox[{"{", 
+     RowBox[{"0.6000000000000001`", ",", 
+      RowBox[{"0.07332390213186879`", "\[VeryThinSpace]", "-", 
+       RowBox[{"0.08131527073675714`", " ", "\[ImaginaryI]"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0.8`", ",", 
+      RowBox[{"0.08152337203117244`", "\[VeryThinSpace]", "-", 
+       RowBox[{"0.1001388558846255`", " ", "\[ImaginaryI]"}]}]}], "}"}], ",", 
+    
+    RowBox[{"{", 
+     RowBox[{"1.`", ",", 
+      RowBox[{"0.08869013062806286`", "\[VeryThinSpace]", "-", 
+       RowBox[{"0.11717798523868123`", " ", "\[ImaginaryI]"}]}]}], "}"}]}], 
+   "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.6661026387239647`*^9, 3.666102651457638*^9}, {
+   3.719152202787754*^9, 3.7191522109623623`*^9}, {3.7191522537174597`*^9, 
+   3.719152260067956*^9}, 3.719152304409523*^9, 3.71915256497681*^9, 
+   3.719152690428997*^9, 3.719152845887116*^9, 3.7191528804460373`*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1920, 1056},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"10.4 for Linux x86 (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 206, 2, 99, "Chapter"],
+Cell[CellGroupData[{
+Cell[811, 28, 532, 12, 107, "Input"],
+Cell[1346, 42, 162, 2, 68, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1545, 49, 2834, 63, 355, "Input"],
+Cell[4382, 114, 755, 15, 692, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5174, 134, 3507, 82, 416, "Input"],
+Cell[8684, 218, 1336, 30, 99, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
