@@ -1,5 +1,6 @@
+![compatibility](https://img.shields.io/badge/Mathematica-8.x_9.x_10.x_11.x-brightgreen.svg)
 
-# MultipleScattering2D.wl - exact multiple scattering in 2D for Mathematica
+## MultipleScattering2D.wl - exact multiple scattering in 2D for Mathematica
 
 A package to calculate multiple scattering according to the 2D wave equation. The best place to get started is the notebook [TwoBodyScattering.nb](examples/TwoBodyScattering.nb). The example [ImpulseWave.nb](examples/ImpulseWave.nb) uses randomly place scatterers, similar to the gifs below, whereas [Source.nb](examples/Source.nb) shows how to change source function. 
 
