@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     10773,        292]
-NotebookOptionsPosition[     10282,        270]
-NotebookOutlinePosition[     10650,        286]
-CellTagsIndexPosition[     10607,        283]
+NotebookDataLength[     10366,        282]
+NotebookOptionsPosition[      9878,        260]
+NotebookOutlinePosition[     10242,        276]
+CellTagsIndexPosition[     10199,        273]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -33,9 +33,9 @@ Cell[BoxData[{
   3.719131306570385*^9, 3.719131309298729*^9}, {3.719141240616714*^9, 
   3.7191412459968243`*^9}}],
 
-Cell[BoxData["195482000"], "Output",
+Cell[BoxData["31469416"], "Output",
  CellChangeTimes->{3.719130468327087*^9, 3.7191313099540052`*^9, 
-  3.719141247779108*^9}]
+  3.719141247779108*^9, 3.719219953146532*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -51,8 +51,9 @@ Cell[BoxData[{
   StyleBox[
    RowBox[{
     RowBox[{
-    "In", " ", "more", " ", "detail", " ", "and", " ", "with", " ", 
-     "scattering", " ", "coefficients"}], ";"}], "Subsubsection"], 
+    "Behind", " ", "the", " ", "scenes", " ", "the", " ", "package", " ", 
+     "calculates", " ", "the", " ", "scattering", " ", "coefficients", " ", 
+     "to", " ", "do", " ", "everything"}], ";"}], "Subsubsection"], 
   "\[IndentingNewLine]", 
   StyleBox["\[IndentingNewLine]", "Subsubsection"], 
   RowBox[{"(*", 
@@ -141,16 +142,14 @@ Cell[BoxData[{
      " ", "cylinder"}], "*)"}], "\[IndentingNewLine]", 
    RowBox[{"listener", " ", "=", " ", 
     RowBox[{"{", 
-     RowBox[{"0", ",", "0"}], "}"}]}], ";"}], 
-  RowBox[{"(*", 
-   RowBox[{"position", " ", "of", " ", "listener"}], "*)"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{
-   "Calculate", " ", "response", " ", "from", " ", "the", " ", "scattering", 
-    " ", "coefficients"}], " ", "*)"}]}], "\n", 
- RowBox[{
-  RowBox[{
+     RowBox[{"0", ",", "0"}], "}"}]}], ";", 
+   RowBox[{"(*", 
+    RowBox[{"position", " ", "of", " ", "listener"}], "*)"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Calculate", " ", "response", " ", "from", " ", "the", " ", "scattering", 
+     " ", "coefficients"}], " ", "*)"}], "\[IndentingNewLine]", 
    RowBox[{"response", "=", 
     RowBox[{"Table", "[", 
      RowBox[{
@@ -195,7 +194,7 @@ Cell[BoxData[{
   3.719131318893031*^9, 3.7191313222073708`*^9}, {3.719135728346349*^9, 
   3.719135745486383*^9}, {3.7191358094866753`*^9, 3.7191358394107513`*^9}, {
   3.719160172632853*^9, 3.719160184401848*^9}, {3.719164562276347*^9, 
-  3.719164687535452*^9}}],
+  3.719164687535452*^9}, {3.719219969739881*^9, 3.719220005842062*^9}}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -207,7 +206,7 @@ Cell[BoxData[
   "For the frequency given, we have mesh t \[Element] Range[0, ", 
    75.39822368615503, ",", 1.236036453871394, "]"],
   Editable->False]], "Print",
- CellChangeTimes->{{3.719164678769844*^9, 3.71916468825567*^9}}],
+ CellChangeTimes->{3.719220006570108*^9}],
 
 Cell[BoxData[
  GraphicsBox[{{}, {{}, 
@@ -247,16 +246,7 @@ ujG95yXZ0/HGY2NZAhTpNWT8TdStSn4pco5GIkfg8ldyF6lSzWoMV7kK9sGd
   GridLines->{None, None},
   GridLinesStyle->Directive[
     GrayLevel[0.5, 0.4]],
-  ImagePadding->All,
-  Method->{"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
-        (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
-         Part[#, 1]], 
-        (Part[{{Identity, Identity}, {Identity, Identity}}, 2, 2][#]& )[
-         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
-        (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
-         Part[#, 1]], 
-        (Part[{{Identity, Identity}, {Identity, Identity}}, 2, 2][#]& )[
-         Part[#, 2]]}& )}},
+  Method->{},
   PlotRange->{{-2.4504950495049505`, 2.5}, {0, 0.023983041650437374`}},
   PlotRangeClipping->True,
   PlotRangePadding->{{
@@ -265,13 +255,13 @@ ujG95yXZ0/HGY2NZAhTpNWT8TdStSn4pco5GIkfg8ldyF6lSzWoMV7kK9sGd
      Scaled[0.02], 
      Scaled[0.05]}},
   Ticks->{Automatic, Automatic}]], "Output",
- CellChangeTimes->{{3.71916467894114*^9, 3.719164688624783*^9}}]
+ CellChangeTimes->{3.719220007011389*^9}]
 }, Open  ]]
 },
-WindowSize->{1920, 1056},
+WindowSize->{1280, 1000},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 Magnification:>1.5 Inherited,
-FrontEndVersion->"10.4 for Linux x86 (64-bit) (February 25, 2016)",
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -286,13 +276,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 490, 11, 107, "Input"],
-Cell[1073, 35, 127, 2, 46, "Output"]
+Cell[580, 22, 490, 11, 104, "Input"],
+Cell[1073, 35, 148, 2, 45, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1237, 42, 5776, 155, 988, "Input"],
-Cell[7016, 199, 511, 10, 34, "Print"],
-Cell[7530, 211, 2736, 56, 402, "Output"]
+Cell[1258, 42, 5888, 154, 1046, "Input"],
+Cell[7149, 198, 488, 10, 34, "Print"],
+Cell[7640, 210, 2222, 47, 374, "Output"]
 }, Open  ]]
 }
 ]
