@@ -22,7 +22,8 @@ By lining up cylinders above and below the source, we effectively create two wal
 ![TwoWalls](media/TwoWallsBodyScattering.gif)
 
 
-### The package's focus is on scattering from randomly placed cyclinders, for example see the notebook  [ImpulseWave.nb](examples/ImpulseWave.nb)
+## Randomly placed cyclinders 
+The package's focus is on scattering from random media, for example see the notebook  [ImpulseWave.nb](examples/ImpulseWave.nb)
 #### Dirichlet boundary conditions
 
 ![dirichlet](media/45-Wave_10-Scatterers.GIF)
