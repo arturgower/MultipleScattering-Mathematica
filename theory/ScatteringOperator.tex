@@ -1,0 +1,387 @@
+\documentclass[ 12pt, a4paper]{article}
+% Use the option doublespacing or reviewcopy to obtain double line spacing
+% \documentclass[doublespacing]{elsart}
+
+% MARGIN SETTINGS
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ left=30mm,
+ right=30mm
+ }
+
+\setlength{\topmargin}{1cm}
+% \addtolength{\textheight}{0cm}
+
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath,mathtools}
+
+\usepackage[mathscr]{eucal} %just for the font \mathscr
+\usepackage{mathdots}
+\usepackage{setspace}
+% \usepackage{stmaryrd}
+\usepackage{hyperref}
+
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\en}{\end{equation}}
+\def\bga#1\ega{\begin{gather}#1\end{gather}} % suggested in technote.tex
+
+\def\bal#1\eal{\begin{align}#1\end{align}} % suggested in technote.tex
+\def\bals#1\eals{\begin{align*}#1\end{align*}}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\Ord}{\mathcal{O}}
+
+\newcommand{\filler}{\hspace*{\fill}}
+\newcommand{\T}{\mathscr T}
+\newcommand{\ii}{\textrm{i}}
+\newcommand{\ee}{\textrm{e}}
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\def \bm#1{\mbox{\boldmath{$#1$}}}   % this is used to write boldface Greek
+
+% \doublespacing
+
+\begin{document}
+
+\title{Calculating scattering coefficients from a cylinder}
+\author{
+Artur L. Gower$^{1}$  \\[12pt]
+$^1$ School of Mathematics, University of Manchester \\
+Oxford Road, Manchester M13 9PL, UK
+}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+Here we derive some of the theory used in the Mathematica package  \href{https://github.com/arturgower/MultipleScattering-Mathematica}{MultipleScattering2D}. Specifically the function \texttt{ScatteringCoefficientOperator}, which calculates the scattering coefficients for any source/exciting function, is given by combing equations~(\ref{eqn:ScatteringOpDirichlet},\ref{eqn:PsiTaylor},\ref{eqn:aDirichlet}) for Dirichlet boundary conditions. Similar equations are given for Neumann too.
+\end{abstract}
+
+\noindent
+{\textit{Keywords:} Multi-pole method, multiple scattering, scattering operator }
+
+
+%%%%%%%%%%%%
+
+\section{The General Setup}
+For a review on multiple scattering from a finite number of obstacles see \cite{martin_2006}.
+
+Consider a homogeneous isotropic medium that can propagate wave according to the scalar Helmholtz equation
+\be
+(\Delta + k^2)\psi(\vec r) =0,
+\en
+where $k$ is real for acoustics and possibly imaginary for fluids. Let there be $N$ scatterers, with the centre located at $\vec r_1$, $\vec r_1$, ..., $\vec r_N$. If we excite the scatterers by sending an incident wave $\psi^I(\vec r)$, we can then write the total wave field $\psi(\vec r| \vec r_1, \ldots, \vec r_N) = \psi^I(\vec r) + \sum_{j=1}^N \psi^S(\vec r; \vec r_j|  \vec r_1, \ldots, \vec r_N)$, where $\psi^S_j(\vec r) := \psi^S(\vec r; \vec r_j|  \vec r_1, \ldots, \vec r_N)$ is the outward going wave\footnote{We are only concerned with what the scatterer is emitting, and not waves that might bounce around inside.} being emitted from the boundary of the $j$-th scatterer. The term $\vec r_1, \ldots, \vec r_N$ indicates the dependence of $\psi$ and $\psi^S_j$'s on the position of all the scatterers. Each scattered wave $\psi^S_j$ is excited by
+\be
+\psi^E_j(\vec r) = \psi^I(\vec r) + \sum_{i \not = j} \psi^S_i(\vec r),
+\label{eqn:ExcitedWave}
+\en
+which we can relate to $\psi^S_j$ through the boundary condition on the $j$-th scatterer to give
+\be
+\psi^S_j(\vec r) =  \T_j \left \{ \psi^E_j \right \}(\vec r),
+\label{eqn:LinearScattering}
+\en
+where $\T_j\{\circ\}(\vec r)$ is the linear \emph{scattering operator} which acts on the whole function $\circ$. Dirchlett and Neumann boundary condtions are examples of when $\T_j$ is a linear operator. By expanding $\psi^S_j$ as in Eq.\eqref{eqn:LinearScattering}, then substituting $\psi^E_j$ from  Eq.\eqref{eqn:ExcitedWave} and then repeating the process by expanding $\psi^S_i$ with eq.\eqref{eqn:LinearScattering} again we obtain
+\be
+\psi^S_j(\vec r) =   \T_j \{ \psi^I \}(\vec r) + \sum_{i \not = j}  \T_j\circ \T_i \left \{ \psi^I \right \}(\vec r) + \sum_{i \not = j}   \sum_{n \not = i} \T_j \circ \T_i \circ \T_n \left \{  \psi^I\right \}(\vec r)    + \ldots.
+\en
+For two scatterers this becomes,
+\be
+\psi^S_1(\vec r) =   \T_1 \{ \psi^I \}(\vec r) + \T_1\circ \T_2 \left \{ \psi^I \right \}(\vec r) +  \T_1 \circ \T_2 \circ \T_1 \left \{  \psi^I\right \}(\vec r)    + \ldots.
+\en
+If on the other hand we stopped expanding the series at
+\bga
+\psi^S_1(\vec r) =  \T_1 \left \{ \psi^I \right \}(\vec r)  + \T_1 \left \{ \psi^S_2  \right \}(\vec r), \notag \\
+\psi^S_2(\vec r) =  \T_2 \left \{ \psi^I \right \}(\vec r)  + \T_2 \left \{ \psi^S_1  \right \}(\vec r).
+\label{eqn:TwoScatterers}
+\ega
+If we could expand each $\psi^S_j$ into a general outgoing wave
+\[
+\psi^S_j(\vec r) = \sum_{n=-\infty}^\infty s_{jn} \mathcal C_n ( r) \mathcal A_n(\theta, \phi),
+\]
+then we could solve for the coefficients $s_{jn}$ by substituting into Eqs.\eqref{eqn:TwoScatterers}.
+
+\section{Cylindrical Scatterers}
+
+The outgoing wave from a scatterer at $\vec r_j$ be expanded as
+\be
+\psi^{S_j}(\vec r) = \sum_{n=-\infty}^\infty a_{jn} H_n (k \|\vec r - \vec r_j \|) \ee^{\ii n \alpha_j},
+\label{eqn:OutingSj}
+\en
+where $H_n:= H_n^{(1)}$ is a Hankel function of the first kind and $\alpha_j$ is the angle between $\vec r - \vec r_j$ and the $x$--axis.
+
+We can expand the outgoing waves~\eqref{eqn:OutingSj} by using Graf's addition theorem\footnote{I double checked this with both \url{http://dlmf.nist.gov/10.23} and \url{http://www.wikiwaves.org/Graf's_Addition_Theorem}.}:
+%\be
+%\mathscr C_\nu (k \|  \vec r - \vec r_1\|) \ee^{\pm \ii \nu (\alpha_1 -\theta_{12})} =
+           %\sum_{m=-\infty}^\infty \mathscr C_{\nu +m} (k \| \vec r_1 - \vec r_2 \|) J_m(k \|\vec r- \vec r_2 \|) \ee^{ \pm \ii m (\pi +\theta_{ij} - \alpha_2)},
+%\label{eqn:Graf}
+%\en
+%I calculate this $\pm$ above thinking that the angle $\alpha_{12}$ between to vectors $\vec r_1$ and $\vec r_2$ satisfies $\alpha_{12} = \alpha_{21}$, but that is not true. In fact $\alpha_{12} = 2 \pi - \alpha_{21}$.
+\be
+\mathscr C_\nu (k \|  \vec r - \vec r_1\|) \ee^{ \ii \nu (\alpha_1 -\theta_{12})} =
+           \sum_{m=-\infty}^\infty \mathscr C_{\nu +m} (k \| \vec r_1 - \vec r_2 \|) J_m(k \|\vec r- \vec r_2 \|) \ee^{ \ii m (\pi +\theta_{12} - \alpha_2)},
+\label{eqn:Graf}
+\en
+provided $\|\vec r- \vec r_2 \|  < \|\vec r_1- \vec r_2 \|$, where $\theta_{12}$ and $\alpha_2$ are respectively the angular cylindrical coordinate of $\vec r_1 - \vec r_2$ and $\vec r -\vec r_2$.
+%\bga
+%\cos \chi = \frac{(\vec r_i-\vec r_j)\cdot \vec r_i}{\|\vec r_i-\vec r_j \| r_i} = \frac{r_i}{\|\vec r_i -\vec r_j\|} - \cos \theta_{ij} \frac{r_j}{\|\vec r_i -\vec r_j\|},
+%\\
+%\sin \chi = \frac{\|(\vec r_i-\vec r_j)\times \vec r_i \|}{\|\vec r_i-\vec r_j \| r_i} = \sin \theta_{ij} \frac{r_j}{\|\vec r_i -\vec r_j\|} \implies
+%\\
+ %\ee^{ \ii \nu \chi} = \left ( \frac{r_i - r_j \ee^{- \ii \theta_{ij} }}{\|\vec r_i -\vec r_j\|} \right )^\nu.
+%\ega
+In the addition theorem $\mathscr C_\nu$ can be substituted with any of the Bessel functions $J_\nu,Y_\nu,H_\nu^{(1)}$ and $H_\nu^{(2)}$, or linear combinations of them.
+
+Using Eq.\eqref{eqn:Graf} we write $\psi^{S_j}$ in terms of an origin centered at the $i$-th scatterer by substituting
+\[
+H_n (k \|  \vec r - \vec r_j\|) \ee^{ \ii n \alpha_j} =
+            \sum_{m=-\infty}^\infty H_{n -m} (k \| \vec r_j - \vec r_i \|) J_m(k \|\vec r- \vec r_i \|) \ee^{ \ii m \alpha_i +\ii (n - m) \theta_{ij}},
+\]
+into the $\psi^{S_j}$ to arrive at
+\bga
+\psi^{S_j}(\vec r) = \sum_{n=-\infty}^\infty \sum_{m=-\infty}^\infty a_{jn} H_{n -m} (k \| \vec r_j - \vec r_i \|) J_m(k \|\vec r- \vec r_i \|) \ee^{ \ii m \alpha_i +\ii (n - m) \theta_{ij}}.
+%\\
+%\psi^{S_j}(\vec r) = \sum_{n=-\infty}^\infty \sum_{m=-\infty}^\infty a_{jn}   H_{n +m} (k r_j) J_m(k r) \ee^{\ii ( n-m) \theta + \ii ( m \theta_j -  n \chi )}.
+%\\= \sum_{n=-\infty}^\infty \sum_{p=-\infty}^\infty a_{jn}   H_{2 n -p} (k r_j) J_{n-p}(k r) \ee^{\ii p \theta + \ii ( (n-p) \theta_j -  n \chi )},
+\ega
+%where to get the last equation we renamed $m = n- p$.
+
+In Section~\ref{sec:BoundaryConditions} we derive some explicit forms for the scattering operator $\T$, given by
+Eqs.\eqref{eqn:ScatteringOpDirichlet} and \eqref{eqn:ScatteringOpNeumann}. Assuming that the scatterers are small compared with the wavelength $k r_S << 1$, where $r_S$ is the radius of the scatterer, then the most general form for outgoing waves from the $j$-th scatterer is
+\bga
+\psi^{S_j}(\vec r) = a_{j} H_0 (k \|\vec r - \vec r_j \|) + (c_{j} \cos (\vec r - \vec r_j) + s_{j} \sin (\vec r - \vec r_j) ) H_1 (k \|\vec r - \vec r_j \|) ,
+\ega
+with $c_{j}=s_{j} =0$ for Dirichlet boundary conditions, where $\cos(\vec r - \vec r_j) = \cos \vartheta$ and $\vartheta$ is the angle between $\vec r - \vec r_j$ and the $x$-axis.
+In which case, using the results in Section~\ref{sec:BoundaryConditions}, the scattering operator for Neumann boundary conditions can be written as
+\begin{multline}
+\T_j : \psi^E(r, \theta) \to  \frac{ \ii \pi r_S^2}{4}  (\psi^E_{\vec r_j,xx} + \psi^E_{\vec r_j,yy}) H_0(k \| \vec r - \vec r_j \|)
+\\
++ \frac{i \pi  r^{2}_S}{2} k( \psi^E_{\vec r_j,x} \cos ( \vec r - \vec r_j ) +  \psi^E_{\vec r_j,y} \sin ( \vec r - \vec r_j )) H_1(k \| \vec r - \vec r_j \|),
+\label{eqn:TjOpNeumann}
+\end{multline}
+accurate up to order $r^{3}_S$ in the scatterer radius $r_S$, where the subscript $\vec r_j$ on $\psi^E_{\vec r_j}$ means that $\psi^E$ and its derivatives are evaluated at $\vec r = \vec r_j$ after differentiation. This implies that to solve Eqns.~\eqref{eqn:TwoScatterers} for every $\vec r$ we need to equate the coefficients of $H_0(k \| \vec r - \vec r_j \|)$, $\cos ( \vec r - \vec r_j ) H_1(k \| \vec r - \vec r_j \|)$ and $\sin ( \vec r - \vec r_j ) H_1(k \| \vec r - \vec r_j \|)$ each to be zero, from which we get
+\bga
+a_{i} = \frac{ \ii \pi r_S^2}{4}  (\psi^I_{\vec r_i,xx} + \psi^I_{\vec r_i,yy}+ \psi^{S_j}_{\vec r_i,xx} + \psi^{S_j}_{\vec r_i,yy}),
+\\
+c_i = \frac{i \pi  r^{2}_S}{2} k( \psi^{I}_{\vec r_i,x}+ \psi^{S_j}_{\vec r_i,x}), \;\; s_i = \frac{i \pi  r^{2}_S}{2} k( \psi^{I}_{\vec r_i,y}+ \psi^{S_j}_{\vec r_i,y}).
+\ega
+To simplify we choose,  without loss of generality, $x_2 = x_1$ and $- y_1 = y_2 = Y/2$ which we use to reduce Eqns.~\eqref{eqn:TwoScatterers} to
+\bga
+ \frac{k^2}{2}  (H_0 - H_2) a_1 + \frac{k^2}{4} (3 H_1 - H_3)s_1 - \frac{4 \ii }{\pi r_S^2} a_{2} = \psi^I_{\vec r_2,xx} + \psi^I_{\vec r_2,yy},
+\\
+\frac{H_1}{Y}c_1 +\frac{2 i }{\pi  k r_S^2}c_2 =-\psi^I_{\vec r_2, x}, \;\;
+ k H_1 a_1 -\frac{2 i}{\pi  k r_S^2}s_2-\frac{k }{2} (H_0-H_2) s_1 =\psi^I_{\vec r_2, y}
+\ega
+where the Hankel functions $H_0$, $H_1$, $H_2$ and $H_3$ are evaluated at $k Y$, with $Y = \| \vec r_1 - \vec r_2 \|$, and to reach the above equations we have used some recurrence relations to calculate the derivatives of $H_0$ and $H_1$.
+
+%We need
+%\bga
+%\psi^S_{0,xx} + \psi^S_{0,yy} = a_{2} \left (\frac{k}{r_j}H_0'(k r_j) +k^2 H_0''( k r_j)\right ) + (c_{2} \cos (\vec r - \vec r_2)
+%\\
+%+ s_{2} \sin (\vec r - \vec r_2) ) \left( \frac{k}{r_j}H_1'(k r_j) +k^2 H_1''( k r_j) \right)
+%\ega
+
+
+
+Apply $\T_1$ on $\psi^S_2$ with the centre of scatterer 1 as the origin we get
+\be
+\T_1 \psi^S_2(\vec r) = a_{2} H_0 (k \|\vec r - \vec r_2 \|) + (c_{2} \cos (\vec r - \vec r_2) + s_{2} \sin (\vec r - \vec r_2) ) H_1 (k \|\vec r - \vec r_2 \|) ,
+\en
+
+
+
+The following formulas will be useful, for $f(\|\vec r - \vec r_j\|)$ we have
+\bga
+f_{,x} (k r_j) =  \frac {k x_j}{r_j} f'( k r_j) , \; \;
+ f_{,y} (k r_j) =  \frac {k y_j}{r_j} f' ( k r_j), \\
+ f_{,yy} (k r_j) +  f_{,xx} (k r_j) =  \frac{k}{r_j}f'(k r_j) +k^2 f''( k r_j).
+\ega
+% and
+% \bga
+% \partial_x \cos(\vec r - \vec r_j) |_{\vec r =0} = \frac{y_j^2}{r_j^{3}}, \; \; \; \partial_x \sin(\vec r - \vec r_j) |_{\vec r=0} = -\frac{x_j y_j}{r_j^3}, \\
+% \partial_y \cos(\vec r - \vec r_j) |_{\vec r =0} = - \frac{x_j y_j}{r_j^{3}}, \; \; \; \partial_y \sin(\vec r - \vec r_j) |_{\vec r =0} = \frac{x_j^2}{r_j^3}, \\
+% \left ( \partial_{xx}+ \partial_{yy} \right )\cos(\vec r - \vec r_j) |_{\vec r =0} = \frac{x_j}{r_j^3}, \;\;  \left ( \partial_{xx}+ \partial_{yy} \right )\sin(\vec r - \vec r_j) |_{\vec r =0} = \frac{y_j}{r_j^3}.
+% \ega
+
+
+\subsection{Boundary conditions and point scatterers}
+ \label{sec:BoundaryConditions}
+ Here we develop expressions for the scattering operator $\T$ and establish how point scatterers behave for different boundary conditions. Given an incident wave $\psi^E$ and outgoing cylindrical wave $\psi^S = a_n H_n(k r) \ee^{\ii n \theta}$, together $\psi^E + \psi^S$ must satisfy the boundary condition on the cylinder with radius $r = r_S$. To simplify we choose the origin of our coordinate system to be the centre of the scatterer and will use $\bar r := r k$.
+
+For a Dirichlet boundary conditions we have
+%\bga
+%\psi^E(r_S, \theta) + \psi^S(r_S, \theta) =0 \;\; \text{ for } \; 0\leq \theta < 2 \pi  \implies
+  %a_n   = - H_n(r_S)^{-1} \mathcal C_n(r_S).
+%\ega
+\bga
+\psi^E(\bar r_S, \theta) + \psi^S(\bar r_S,\theta) =0 \;\; \text{ for } \; 0\leq \theta < 2 \pi  \implies
+  a_n  = - \frac{H_n(\bar r_S)^{-1}}{2\pi}\int_{0}^{2 \pi}\psi^E(\bar r_S, \theta)\ee^{-\ii n \theta} d \theta,
+\label{eqn:aDirichlet}
+\ega
+noting that $\ee^{\ii n \theta}$ forms a complete basis for functions on $\theta \in [0, 2\pi]$.
+
+For a Neumann boundary conditions we have
+\bga
+\frac{\partial \psi^E}{\partial \bar r}(\bar r_S, \theta) + \frac{\partial \psi^S}{\partial \bar r}(\bar r_S, \theta) =0  \;\; \text{ for } \; 0\leq \theta < 2 \pi  \implies
+\\
+  a_n  = - \frac{\partial_{\bar r} H_n( \bar r_S)^{-1}}{2\pi}\int_{0}^{2 \pi}\partial_{\bar r} \psi^E(\bar r_S, \theta)\ee^{-\ii n \theta} d \theta,
+\label{eqn:aNeumann}
+\ega
+
+Our main interest is to model point scatterers for which $\bar r_S \to 0$. In this limit the incident wave should converge in an open ball to its Taylor series at $r_S$  (as the wave field should be perfectly smooth), so we can write
+\begin{multline}
+\psi^E(\bar r_S, \vartheta) =  \sum_{k= 0}^\infty \sum_{m= 0}^p \frac{\partial^p \psi^E_0}{\partial_{x}^m \partial_{y}^{p-m}}   \frac{ r_S^p (\cos \vartheta)^m (\sin \vartheta)^{p-m} }{m! (p-m)!}
+\\
+= \sum_{p= 0}^\infty \sum_{m= 0}^p \frac{\partial^p \psi^E_0}{\partial_{x}^m \partial_{ y}^{p-m}}  \frac{ r_S^p  }{m! (p-m)!} \sum_{m_1= 0}^m \sum_{p_1= 0}^{p-m} \frac{\ee^{\ii (p-2 m_1-2 p_1)\vartheta}   }{(-1)^{p_1} 2^p \ii^{p-m} } \binom{m}{m_1} \binom{p-m}{p_1},
+%Formula checked from scratch in Mathematica!
+\label{eqn:PsiTaylor}
+\end{multline}
+where the subscript $0$ on $\psi^E_0$ and its derivatives means that the expression was evaluated at $x=y=0$ after differentiation. When substituting this expression into the integral in Eq.\eqref{eqn:aDirichlet}, only terms with $p-2 m_1-2 p_1 =n$ will have a non-zero contribution, because every other term  after multiplying with $\ee^{-\ii n \vartheta}$ and integrating in $\vartheta$ over $0$ to $2 \pi$ will be zero. Likewise, only terms with $p-2 m_1-2 p_1 =n$ will have a non-zero contribution to Eq.\eqref{eqn:aNeumann}.
+So letting $p_1 =  j-n/2- m_1$ and $p = 2 j$, so that  $p-2 m_1-2 p_1 =n$, and integrating over $\vartheta$ we conclude that
+%So letting $p_1 = (|n|- n)/2 +j- m_1$ and $p = |n|+ 2 j$, so that  $p-2 m_1-2 k_1 =n$, and integrating over $\vartheta$ we conclude that
+%\[
+%\sum_{j= 0}^\infty \sum_{m= 0}^{|n|+ 2 j} \frac{\partial^{ |n|+ 2 j} \psi^E_0}{\partial_{\bar x}^m \partial_{\bar y}^{{ |n|+ 2 j}-m}}  \frac{\bar r_S^{ |n|+ 2 j}  }{m! (k-m)!} \sum_{m_1= 0}^m \frac{(-1)^{(|n|- n)/2 +j- m_1} }{ 2^{ |n|+ 2 j} \ii^{ |n|+ 2 j -m} } \binom{m}{m_1} \binom{ |n|+ 2 j-m}{(|n|- n)/2 +j- m_1},
+%\]
+%So letting $k_1 = (k- n)/2- m_1$ and $k = n+ 2 j$ in Eq.~\eqref{eqn:PsiTaylor} and integrating over $\vartheta$ we can conclude
+%\begin{multline}
+%p_n= \frac{1}{2 \pi}\int_{0}^{2 \pi} \psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta =
+  %\sum_{j= \text{max} \{0, - \ceil{n/2} \} }^\infty \left (  \frac{\bar r_S}{2} \right )^{2 j+n} \sum_{m= 0}^{n+ 2 j} \frac{\partial^{2 j+n} \psi^E_0}{\partial_{\bar x}^m \partial_{\bar y}^{{ 2 j+n} -m}}  \frac{C^m_{j, 2 j +n} \ii^{m{-2 j - n}}   }{m! ({2 j +n}-m)!} ,
+%%Formula checked from scratch in Mathematica for the first two C's just below!
+%\label{eqn:PsiTaylor}
+%\end{multline}
+%where
+%\be
+%C^m_{j, 2 j +n} =  \sum_{m_1= \text{max} \{0, -n -j\} }^{\text{min}\{m, j\} } (-1)^{j-m_1} \binom{m}{m_1} \binom{{2 j +n} -m}{j-m_1}
+%\en
+%\be
+%C^m_{j, p} =  \sum_{m_1= \text{max} \{0, j-p\} }^{\text{min}\{m, j\}} (-1)^{j-m_1} \binom{m}{m_1} \binom{p -m}{j-m_1}.
+%\en
+%Note that because $k = n+ 2 j$, $n$ can be negative and the minimal value for $k$ is $0$, then $2 j \geq -n $. Also, as $k_1$ was substituted for $j-m_1$, then $-n -j \leq m_1 \leq j$, which combined with the restriction $0 \leq m_1 \leq m$, becomes
+%$
+%\text{max } \{0, -n -j\} \leq m_1 \leq \text{ min } \{m, j\}.
+%$
+%\begin{multline}
+%p_n= \frac{1}{2 \pi}\int_{0}^{2 \pi} \psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta = \sum_{j= 0}^\infty \left (\frac{\bar r_S}{2}\right)^{ |n|+ 2 j} \sum_{m= 0}^{|n|+ 2 j} \frac{\partial^{ |n|+ 2 j} \psi^E_0}{\partial_{\bar x}^m \partial_{\bar y}^{{ |n|+ 2 j}-m}}  \frac{\ii^{ m-|n|- 2 j } C^m_{n,j}  }{m! (|n|+ 2 j -m)!} ,
+%%Formula checked from scratch in Mathematica for the C's just below!
+%\label{eqn:PsiTaylor}
+%\end{multline}
+%where
+%\be
+%C^m_{n,j} = \sum_{m_1= m_1^\text{min}}^{m_1^\text{max}} (-1)^{\frac{|n|- n}{2} +j- m_1} \binom{m}{m_1} \binom{ |n|+ 2 j-m}{(|n|- n)/2 +j- m_1},
+%\en
+\be
+\mathcal P_n\{\psi^E \}= \frac{1}{2 \pi}\int_{0}^{2 \pi} \psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta = \sum_{j= |n|/2}^\infty \left (\frac{r_S}{2}\right)^{ 2 j} \sum_{m= 0}^{2 j} \frac{\partial^{ 2 j} \psi^E_0}{\partial_{x}^m \partial_{y}^{{ 2 j}-m}}  \frac{\ii^{ m-2 j} C^m_{n,  j }  }{m! (2 j -m)!} ,
+%Formula checked from scratch in Mathematica for the C's just below!
+\label{eqn:PsiTaylor}
+\en
+where
+\be
+C^m_{n,j} = \sum_{m_1= \text{max } \{0,  m -j -n/2 \}}^{\text{ min } \{m, j -n/2\}} (-1)^{-n/2 +j- m_1} \binom{m}{m_1} \binom{ 2 j -m}{ j  -n/2- m_1},
+\en
+%where as $p_1$ was substituted for $(|n|- n)/2 +j- m_1$, then from $0\leq p_1 \leq p-m $ we conclude that $m_1 \leq  (|n|- n)/2 +j $ and $-(|n|+ n)/2 -j +m \leq m_1$, which combined with the restriction $0 \leq m_1 \leq m$ implies that $m_1^\text{min} = \text{max } \{0, -(|n|+ n)/2 -j +m\}$ and $m_1^\text{max } = \text{ min } \{m, (|n|- n)/2 +j\}$.
+where $j$ (same as all the dummy indexes) increases in increments of 1, and as $p_1$ was substituted for $j -n/2- m_1$, then from $0\leq p_1 \leq p-m $ we conclude that $m_1 \leq  j -n/2 $ and $-j -n/2 +m \leq m_1$, which combined with the restriction $0 \leq m_1 \leq m$ implies that $ \text{max } \{0,  m -j -n/2 \}\leq m_1 \leq \text{ min } \{m, j -n/2\}$.
+%For only $j= |n|/2$ the above can be reduced to
+%\bga
+%p_n= \frac{1}{2 \pi}\int_{0}^{2 \pi} \psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta =   \sum_{m= 0}^{|n|} \frac{\partial^{|n|} \psi^E_0}{\partial_{\bar x}^m \partial_{\bar y}^{{|n|}-m}}   \frac{(\ii\sign n)^{m-{|n|}}  }{m! ({|n|}-m)!}\frac{\bar r_S^{|n|}}{2^{|n|}} + \mathcal O(\bar r_S^{|n|+2}),
+%%\\
+%%dp_n= \frac{1}{2 \pi}\int_{0}^{2 \pi} \partial_{\bar r}\psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta =   \sum_{m= 0}^n \frac{\partial^n \psi^E_0}{\partial_{\bar x}^m \partial_{\bar y}^{n-m}}   \frac{\ii^{m-n}  }{m! (n-m)!}\frac{\bar r_S^n}{2 ^n},
+%\ega
+
+For the Neumann boundary condition we need
+\be
+\frac{1}{2 \pi}\int_{0}^{2 \pi} \partial_{\bar r}\psi^E(\bar r_s, \vartheta)\ee^{- \ii n \vartheta} d \vartheta = k^{-1} \partial_{r_S}\mathcal P_n\{\psi^E \}.
+\label{eqn:DPsiTaylor}
+\en
+
+The terms~\eqref{eqn:PsiTaylor} suggest that the series of the scattering operators converge absolutely if $r_S \leq 2$, assuming the derivatives of $\psi^E$
+%, $H_n^{(1)}(\bar r)/ H_n^{(1)}(\bar r_S)$ and $H_n^{(1)}(\bar r)/ \partial_{\bar r} H_n^{(1)}(\bar r_S)$
+are uniformly bounded for every $n$ and $\bar r> \bar r_S$ and $k> \delta>0$ (as $w^E$ will often have a singularity at $k=0$). So for $r_S \leq 2$ we can truncate the series~\eqref{eqn:PsiTaylor} at $j = N_j/2$ for every $n$, which we denote by $\mathcal P_n^{N_j} := \mathcal P_n + \mathcal O(r_s^{N_j +2}) $.
+
+Eq.~\eqref{eqn:PsiTaylor} together with Eq.~\eqref{eqn:aDirichlet} imply that the scattering operator becomes
+\be
+\T :  \psi^E( \bar r, \theta) \to \psi^S(\bar r, \theta) =  - \sum_{n = -\infty}^\infty\frac{H_n(\bar r)}{ H_n(\bar r_S)} \mathcal P_n\{ \psi^E \} \ee^{\ii n \theta} ,
+\label{eqn:ScatteringOpDirichlet}
+\en
+which is indeed linear in $\psi^E$. Similarly for the Neumann boundary condition the scattering operator becomes
+%\be
+%\T :  \mathcal C_n(r) \ee^{\ii n \theta} \to  - \frac{ H_n(r)}{H_n(r_S)} \mathcal C_n(r_S) \ee^{\ii n \theta} \implies \T\{ \}
+%\en
+\be
+\T : \psi^E(\bar r, \theta) \to \psi^S(\bar r, \theta) = - \sum_{n = -\infty}^\infty \frac{H_n(\bar r)}{\partial_{\bar r} H_n( \bar r_S)}  k^{-1} \partial_{r_S} \mathcal P_n\{ \psi^E  \} \ee^{\ii n \theta},
+\label{eqn:ScatteringOpNeumann}
+\en
+which is also linear in $\psi^E$.
+
+To examine the limit where the particles radius $r_S$ is small in comparison to the wavelength $k r_S \to 0$, we first note that
+\be
+\frac{H_n(\bar r)}{H_n( \bar r_S)} = H_n(\bar r)  \left\{
+	\begin{array}{ll}
+	 \frac{\ii \pi (k r_S)^n }{2^{n} (n-1)!} + \mathcal O( k r_S)^{n +2} ,  \quad \quad \quad \; \;\; n > 0, \\
+	 \frac{\pi}{ \pi +2 \ii (\gamma_0 +\log(k r_S/2))} + \mathcal O( k r_S)^{2}, \quad  n =0,
+	\end{array}
+\right.
+\label{eqn:DirchlettHankelExpansion}
+\en
+and
+\be
+\frac{H_n(\bar r)}{\partial_{\bar r_S} H_n( \bar r_S)} = H_n(\bar r)  \left\{
+	\begin{array}{ll}
+	 - \frac{\pi \ii  (k r_S)^{n +1} }{2^{n} n!}  + \mathcal O( k r_S)^{n +3} ,  \quad n > 0, \\
+	 - \frac{\pi \ii }{2} k r_S  + \mathcal O( k r_S)^{3}, \quad \quad \quad \; \, n =0,
+	\end{array}
+\right.
+\label{eqn:NeumannHankelExpansion}
+\en
+here $\gamma_0 = 0.5772$, the term $H_n(\bar r)$ has not been asymptotically expanded as $\bar r$ can be of any size, and note that for $n <0$ we have $H_n(\bar r_S) = (-1)^n H_{|n|}(\bar  r_S)$. So, for example, if we want to asymptotically expand the scattered wave $w^S$ up too $\mathcal O (\bar r_S^2)$ for the Dirchlett boundary condition, we need to expand
+%$\mathcal P_{0} \{ \psi^E\}, \, \mathcal P_{-1} \{ \psi^E\}$ and $ \mathcal P_{1} \{ \psi^E\}$ up too $\mathcal O(\bar r_S^2)$, $\mathcal O(\bar r_S^1)$ and $\mathcal O(\bar r_S^1)$, respectively, for a Dirchlett boundary condition
+\bal
+\psi^S(\bar r, \theta) = & - \frac{H_1(\bar r)}{ H_1( \bar r_S)}   \mathcal P_{-1}\{ \psi^E  \} \ee^{- \ii \theta} - \frac{H_0(\bar r)}{ H_0( \bar r_S)}\mathcal P_0\{ \psi^E  \} - \frac{H_1(\bar r)}{ H_1( \bar r_S)}   \mathcal P_1\{ \psi^E  \} \ee^{\ii \theta}  + \mathcal O (\bar r_S^2)
+\\
+= & - H_0(k r) \frac{\pi  \psi^E_0 }{2 \ii \log (\bar r_S /2 )+\pi +2 \ii \gamma_0 } + \mathcal O (\bar r_S^2),
+\eal
+while to expand $w^S$ up too $\mathcal O (\bar r_S^3)$ for the Neumann boundary condition, we need
+\bal
+\psi^S(\bar r, \theta) = &- \frac{k^{-1} H_1(\bar r)}{\partial_{\bar r} H_1( \bar r_S)}  \partial_{r_S} \mathcal P_1\{ \psi^E  \} \ee^{\ii \theta} - \frac{k^{-1} H_0(\bar r)}{\partial_{\bar r} H_0( \bar r_S)}  \partial_{r_S} \mathcal P_{0}\{ \psi^E  \}
+\notag \\
+& - \frac{k^{-1} H_1(\bar r)}{\partial_{\bar r} H_1( \bar r_S)}  \partial_{r_S} \mathcal P_{-1}\{ \psi^E  \} \ee^{-\ii \theta} + \mathcal O (\bar r_S^3)
+\notag \\
+ = &  \frac{i \pi  r^{2}_S}{2} k( \partial_x \psi^E_{0} \cos \theta +  \partial_y \psi^E_{0} \sin \theta) H_1(k r )
+ \notag \\
+  & +\frac{ \ii \pi r_S^2}{4}  (\partial_x^2 \psi^E_{0} + \partial_y^2 \psi^E_{0}) H_0 (k r) +\mathcal O(\bar r_S^3).
+\eal
+
+
+If we are interested in lower frequencies for $k$, then we must be careful with the dependence that $\psi^E$ has on the wavenumber $k$. In general $\psi^E$ will be a sum of terms of the form
+\be
+ \psi^E_q=  H_q (k \|\vec r-\vec r_E\|) \ee^{\ii q \arctan(\vec r - \vec r_E) },
+\label{eqn:PsiETerm}
+\en
+where $\arctan(x,y) = \arctan (y/x)$, $\vec r_E$ is a constant vector, $c_q$ is determined by boundary conditions and we assume they are uniformly bounded for every $k$. If we are to approximate $\mathcal P_n \{\psi^E_q\}$($k \partial_{r_S}\mathcal P_n \{\psi^E_q\}$) up too $\mathcal O ( r_s^{N_j +2})$($\mathcal O ( r_s^{N_j +1})$) by truncating at $j = N_j/2$,  then we should investigate the term left out $j= N_j/2 +1$. Using~\eqref{eqn:PsiETerm} and expanding the term $j= N_j/2+1$ in $\mathcal P_n\{\psi^E_q\}$  in a series of powers of $k$, the lowest order term will be
+\be
+\mathcal P_n\{\psi^E_q\} -\mathcal P_n^{N_j}\{\psi^E_q\}  = k^{-|q|} r_S^{N_j + 2 } \mathcal O(1) + \mathcal O(r_S^{N_j+2} k^{2 -|q|}),
+\en
+which is multiplied with Eq.~\eqref{eqn:DirchlettHankelExpansion}
+%\be
+%\frac{H_n(\bar r)}{H_n( \bar r_S)} =  \left(\frac{r_S}{r}\right)^{|n|}+ \mathcal O (r_S^{|n|}) \mathcal O (k^2) + \mathcal O (r_S^{|n|+1}) ,
+%\en
+to get the scattering operator.
+For the Neumann boundary condition,
+\be
+k^{-1} \left (\partial_{r_S} \mathcal P_n\{\psi^E_q\} - \partial_{r_S} \mathcal P_n^{N_j}\{\psi^E_q\} \right)  = k^{-q-1} r_S^{N_j + 1 } \mathcal O(1) + \mathcal O(r_S^{N_j+1})\mathcal O( k^{1 - q}),
+\en
+which is multiplied with Eq.~\eqref{eqn:NeumannHankelExpansion}.
+%\be
+%\frac{H_n(\bar r)}{\partial_{\bar r} H_n( \bar r_S)} = -\frac{k r_S }{|n|} \left(\frac{r_S}{r}\right)^{|n|}+ \mathcal O (r_S^{|n|}) \mathcal O (k^3).
+%\en
+
+\begin{thebibliography}{9}
+
+\bibitem{martin_2006}
+  Martin, Paul A. Multiple scattering: interaction of time-harmonic waves with N obstacles. Vol. 107. Cambridge University Press, 2006.
+
+\end{thebibliography}
+
+
+\end{document}
